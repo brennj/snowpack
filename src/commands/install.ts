@@ -418,9 +418,6 @@ export async function install(
       rollupPluginDependencyStats((info) => (dependencyStats = info)),
       ...userDefinedRollup.plugins, // load user-defined plugins last
       rollupPluginCatchUnresolved(),
-      ...(process.env.NODE_ENV === 'production' && config.buildOptions.optimize
-        ? [terser({compress: false, mangle: true})]
-        : []), // https://github.com/terser/terser#terser-fast-minify-mode
     ].filter(Boolean) as Plugin[],
     onwarn(warning, warn) {
       // Warn about the first circular dependency, but then ignore the rest.
@@ -454,6 +451,9 @@ export async function install(
     sourcemap: sourceMap,
     exports: 'named',
     chunkFileNames: 'common/[name]-[hash].js',
+    plugins: [
+      ...(config.buildOptions.optimize ? [terser({compress: false, mangle: true})] : []), // https://github.com/terser/terser#terser-fast-minify-mode
+    ],
   };
   if (Object.keys(installEntrypoints).length > 0) {
     try {

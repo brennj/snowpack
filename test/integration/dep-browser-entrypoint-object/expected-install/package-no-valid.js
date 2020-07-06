@@ -1,3 +1,1 @@
-const foobar = 42;
-
-export { foobar };
+const o=42;export{o as foobar};

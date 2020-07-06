@@ -1,4 +1,1 @@
-import { foo } from 'mock-test-package-b';
-import { foo as foo$1 } from 'mock-test-package-b/entrypoint';
-
-console.log(foo, foo$1);
+import{foo as o}from"mock-test-package-b";import{foo as t}from"mock-test-package-b/entrypoint";console.log(o,t);

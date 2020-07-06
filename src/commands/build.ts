@@ -123,7 +123,11 @@ export async function command(commandOptions: CommandOptions) {
   }
 
   // Write the `import.meta.env` contents file to disk
-  await fs.writeFile(path.join(internalFilesBuildLoc, 'env.js'), generateEnvModule('production'));
+  const envFile = generateEnvModule('production');
+  const envMin = config.buildOptions.optimize
+    ? Terser.minify(envFile, {compress: false, mangle: true}).code
+    : envFile;
+  await fs.writeFile(path.join(internalFilesBuildLoc, 'env.js'), envMin || envFile);
 
   const includeFileSets: [string, string, string[]][] = [];
   for (const [fromDisk, toUrl] of Object.entries(config._mountedDirs)) {
@@ -183,7 +187,8 @@ export async function command(commandOptions: CommandOptions) {
           contents = wrapImportMeta({code: contents, env: true, hmr: false, config});
           if (config.buildOptions.optimize) {
             try {
-              contents = Terser.minify(contents, {compress: false, mangle: true}).code as string; // https://github.com/terser/terser#terser-fast-minify-mode
+              const minified = Terser.minify(contents, {compress: false, mangle: true}).code; // https://github.com/terser/terser#terser-fast-minify-mode
+              if (minified) contents = minified; // if minification failed, skip
             } catch (err) {
               console.error(err);
             }

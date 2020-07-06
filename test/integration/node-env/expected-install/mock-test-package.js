@@ -1,6 +1,1 @@
-const nodeEnv =  true ;
-const cliA =  true ;
-const confA =  true ;
-const confB =  true ;
-
-export { cliA, confA, confB, nodeEnv };
+const t=true;const e=true;const o=true;const r=true;export{e as cliA,o as confA,r as confB,t as nodeEnv};

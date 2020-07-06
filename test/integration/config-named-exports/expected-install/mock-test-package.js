@@ -1,8 +1,1 @@
-var entrypoint = {
-    export1: 'foo',
-    export2: 'bar',
-};
-
-var export1 = entrypoint.export1;
-var export2 = entrypoint.export2;
-export { export1, export2 };
+var r={export1:"foo",export2:"bar"};var o=r.export1;var e=r.export2;export{o as export1,e as export2};

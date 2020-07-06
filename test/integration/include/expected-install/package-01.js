@@ -1,3 +1,1 @@
-function test() {}
-
-export { test };
+function n(){}export{n as test};
