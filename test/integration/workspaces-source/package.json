@@ -1,0 +1,11 @@
+{
+  "name": "workspaces-source",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Test for yarn workspaces to ensure packages can be imported by their source without needing to be bundled",
+  "workspaces": ["packages/*"],
+  "dependencies": {
+    "react": "latest",
+    "react-dom": "latest"
+  }
+}
