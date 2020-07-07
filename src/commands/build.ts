@@ -38,10 +38,10 @@ async function installOptimizedDependencies(
     },
   });
   // 1. Scan imports from your final built JS files.
-  const installTargets = await getInstallTargets(
-    installConfig,
-    Object.values(allFilesToResolveImports),
-  );
+  const installTargets = await getInstallTargets({
+    config: installConfig,
+    scannedFiles: Object.values(allFilesToResolveImports),
+  });
   // 2. Install dependencies, based on the scan of your final build.
   const installResult = await installRunner({
     ...commandOptions,

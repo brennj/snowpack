@@ -6,6 +6,7 @@ import rollupPluginReplace from '@rollup/plugin-replace';
 import {init as initESModuleLexer} from 'es-module-lexer';
 import findUp from 'find-up';
 import fs from 'fs';
+import {getPackages} from '@manypkg/get-packages';
 import * as colors from 'kleur/colors';
 import mkdirp from 'mkdirp';
 import ora from 'ora';
@@ -485,10 +486,21 @@ export async function install(
   return {success: true, importMap};
 }
 
-export async function getInstallTargets(
-  config: SnowpackConfig,
-  scannedFiles?: SnowpackSourceFile[],
-) {
+interface PackageManifest {
+  dependencies: Object;
+}
+
+interface InstallTargetsConfiguration {
+  config: SnowpackConfig;
+  scannedFiles?: SnowpackSourceFile[];
+  pkgManifest?: PackageManifest;
+}
+
+export async function getInstallTargets({
+  config,
+  scannedFiles = [],
+  pkgManifest,
+}: InstallTargetsConfiguration) {
   const {knownEntrypoints, webDependencies} = config;
   const installTargets: InstallTarget[] = [];
   if (knownEntrypoints) {
@@ -496,6 +508,10 @@ export async function getInstallTargets(
   }
   if (webDependencies) {
     installTargets.push(...scanDepList(Object.keys(webDependencies), cwd));
+  }
+  if (pkgManifest) {
+    const deps = await getWorkspacePackageDependenciesWithSource();
+    installTargets.push(...scanDepList(deps, cwd));
   }
   if (scannedFiles) {
     installTargets.push(...(await scanImportsFromFiles(scannedFiles, config)));
@@ -505,9 +521,19 @@ export async function getInstallTargets(
   return installTargets;
 }
 
+// examine all the dependencies of the project - go through each one
+// and determine whether it has source: true in the package.json of that file.
+async function getWorkspacePackageDependenciesWithSource() {
+  const {packages} = await getPackages(cwd);
+  return packages
+    .map(({dir}) => require(path.join(dir, 'package.json')))
+    .filter((json) => (json ? json.source : false))
+    .map(({name}) => name);
+}
+
 export async function command(commandOptions: CommandOptions) {
   const {cwd, config} = commandOptions;
-  const installTargets = await getInstallTargets(config);
+  const installTargets = await getInstallTargets({config});
   if (installTargets.length === 0) {
     defaultLogError('Nothing to install.');
     return;
