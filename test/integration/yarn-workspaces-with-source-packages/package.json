@@ -1,0 +1,16 @@
+{
+    "description": "Test that makes sure that Yarn Workspaces work properly with packages that contain uncompiled source code",
+    "private": true,
+    "version": "0.0.1",
+    "workspaces": [
+      "packages/*"
+    ],
+    "scripts": {
+      "TEST": "node ../../../pkg/dist-node/index.bin.js"
+    },
+    "dependencies": {
+      "react": "latest",
+      "react-dom": "latest"
+    }
+  }
+  

@@ -9,3 +9,4 @@ test/**/node_modules/.cache
 test/integration/**/web_modules
 .DS_Store
 .idea
+test/integration/**/node_modules

@@ -1,0 +1,10 @@
+{
+    "name": "@test-packages/dependency-one",
+    "version": "0.0.1",
+    "private": true,
+    "entry": "./index.jsx",
+    "source": true,
+    "dependencies": {
+        "color": "3.1.2"
+    }
+}

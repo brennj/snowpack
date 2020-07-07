@@ -1,0 +1,7 @@
+{
+    "name": "@test-packages/yarn-workspaces-main-test",
+    "version": "0.0.1",
+    "dependencies": {
+        "@test-packages/dependency-one": "0.0.1"
+    }
+}
