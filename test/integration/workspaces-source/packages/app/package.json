@@ -13,7 +13,6 @@
     "@packages/dependency": "0.0.1"
   },
   "devDependencies": {
-    "@snowpack/app-scripts-react": "^1.4.0",
-    "prettier": "^2.0.0"
+    "@snowpack/app-scripts-react": "^1.4.0"
   }
 }
